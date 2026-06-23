@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
-
+import java.sql.*;
 public class ExpenseTracker {
 
     static class Expense {
@@ -24,10 +24,12 @@ public class ExpenseTracker {
 
     public static void main(String[] args) {
 
+        testConnection();
+
         Scanner sc = new Scanner(System.in);
         ArrayList<Expense> expenses = new ArrayList<>();
         double monthlyBudget = loadBudget();
-        loadFromFile(expenses);
+        loadFromDatabase(expenses);
         while (true) {
 
             System.out.println("\n===== Expense Tracker =====");
@@ -54,14 +56,14 @@ public class ExpenseTracker {
 
             if (choice == 1) {
                 addExpense(expenses, sc);
-                saveToFile(expenses);
+                saveToDatabase(expenses);
             } 
             else if (choice == 2) {
                 viewExpenses(expenses);
             } 
             else if (choice == 3) {
                 deleteExpense(expenses, sc);
-                saveToFile(expenses);
+                saveToDatabase(expenses);
             } 
             else if (choice == 4) {
                 System.out.println("Exiting Expense Tracker. Goodbye!");
@@ -75,7 +77,7 @@ public class ExpenseTracker {
             }
             else if (choice == 7) {
                 editExpense(expenses, sc);
-                saveToFile(expenses);
+                saveToDatabase(expenses);
             }
             else if (choice == 8) {
                 searchByCategory(expenses, sc);
@@ -131,6 +133,7 @@ public class ExpenseTracker {
         }
 
         expenses.add(new Expense(category, amount, date));
+
 
         System.out.println("Expense added successfully.");
     }
@@ -259,13 +262,49 @@ public class ExpenseTracker {
         }
     }
 
-    static void saveToFile(ArrayList<Expense> expenses) {
-        try (FileWriter writer = new FileWriter("expenses.txt", false)) {
+    static void saveToDatabase(ArrayList<Expense> expenses) {
+        String url = "jdbc:mysql://localhost:3306/expense_db"; // Your local DB
+        String user = "root";
+        String password = System.getenv("DB_PASSWORD"); 
+        String query = "INSERT INTO expenses (expense_date, category, amount) VALUES (?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            // Clear the database table first before rewriting the arraylist state
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("TRUNCATE TABLE expenses");
+
             for (Expense e : expenses) {
-                writer.write(e.date + "," + e.category + "," + e.amount + "\n");
+                pstmt.setString(1, e.date.toString()); // Sets first '?'
+                pstmt.setString(2, e.category);        // Sets second '?'
+                pstmt.setDouble(3, e.amount);          // Sets third '?'
+                pstmt.addBatch();                      // Batching optimizes the execution
             }
-        } catch (IOException e) {
-            System.out.println("Error saving file.");
+            pstmt.executeBatch();
+        } catch (SQLException e) {
+            System.out.println("Error saving data to MySQL: " + e.getMessage());
+        }
+    }
+
+    static void loadFromDatabase(ArrayList<Expense> expenses) {
+    String url = "jdbc:mysql://localhost:3306/expense_db";
+    String user = "root";
+    String password = System.getenv("DB_PASSWORD"); 
+    String query = "SELECT expense_date, category, amount FROM expenses";
+
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                LocalDate date = LocalDate.parse(rs.getString("expense_date"));
+                String category = rs.getString("category");
+                double amount = rs.getDouble("amount");
+                expenses.add(new Expense(category, amount, date));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error loading data from MySQL: " + e.getMessage());
         }
     }
 
@@ -449,29 +488,50 @@ public class ExpenseTracker {
     }
 
     static void saveBudget(double budget) {
-        try (FileWriter writer = new FileWriter("budget.txt")) {
-            writer.write(String.valueOf(budget));
-        } catch (IOException e) {
-            System.out.println("Error saving budget.");
+    String url = "jdbc:mysql://localhost:3306/expense_db";
+    String user = "root";
+    String password = System.getenv("DB_PASSWORD"); 
+    
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         Statement stmt = conn.createStatement()) {
+            
+            // Wipe old budget and insert the new one
+            stmt.executeUpdate("TRUNCATE TABLE budget_config");
+            stmt.executeUpdate("INSERT INTO budget_config (monthly_budget) VALUES (" + budget + ")");
+        } catch (SQLException e) {
+            System.out.println("Error saving budget to MySQL.");
         }
     }
 
     static double loadBudget() {
-        try {
-            File file = new File("budget.txt");
-            Scanner sc = new Scanner(file);
-
-            if(sc.hasNextLine()) {
-                double budget = Double.parseDouble(sc.nextLine());
-                sc.close();
-                return budget;
+        String url = "jdbc:mysql://localhost:3306/expense_db";
+        String user = "root";
+        String password = System.getenv("DB_PASSWORD"); 
+        
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT monthly_budget FROM budget_config")) {
+            
+            if (rs.next()) {
+                return rs.getDouble("monthly_budget");
             }
-
-            sc.close();
-        } catch (Exception e) {
-            System.out.println("No saved budget found.");
+        } catch (SQLException e) {
+            System.out.println("No saved budget found in MySQL.");
         }
-
         return 0;
+    } 
+    public static void testConnection() {
+
+        try(Connection conn =
+            DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/expense_db",
+                "root",
+                System.getenv("DB_PASSWORD"))) {
+
+            System.out.println("Connected!");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
