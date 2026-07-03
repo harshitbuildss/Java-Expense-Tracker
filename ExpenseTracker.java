@@ -1,6 +1,4 @@
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -279,7 +277,7 @@ public class ExpenseTracker {
                 pstmt.setString(1, e.date.toString()); // Sets first '?'
                 pstmt.setString(2, e.category);        // Sets second '?'
                 pstmt.setDouble(3, e.amount);          // Sets third '?'
-                pstmt.addBatch();                      // Batching
+                pstmt.addBatch();                      // Batching optimizes the execution
             }
             pstmt.executeBatch();
         } catch (SQLException e) {
