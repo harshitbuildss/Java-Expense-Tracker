@@ -1,55 +1,115 @@
-# Smart Expense Tracker
+# Smart Expense Tracker REST API
 
-A Java-based Expense Tracker application built using Object-Oriented Programming principles. The application allows users to manage expenses, track spending patterns, generate reports, and persist data using MySQL and JDBC.
+A backend expense management application built using **Spring Boot**, **Spring Data JPA**, **Hibernate**, and **MySQL**. The project follows a layered architecture and exposes RESTful APIs for performing CRUD operations and expense analysis.
 
-## Features
 
-* Add, edit, and delete expenses
-* View all recorded expenses
-* Search expenses by category
-* Generate category-wise expense summaries
-* View expenses by month and year
-* Sort expenses by amount
-* Generate monthly expense reports
-* Set and track monthly budgets
-* Persistent data storage using MySQL
-* Input validation and exception handling
 
-## Technologies Used
+## Features:
 
-* Java
-* Object-Oriented Programming (OOP)
-* Java Collections Framework (ArrayList, HashMap)
-* JDBC
-* MySQL
-* File Handling (Legacy Implementation)
-* Git & GitHub
+- Add a new expense
+- View all expenses
+- View an expense by ID
+- Update existing expenses
+- Delete expenses
+- Search expenses by category
+- Category-wise expense summary
+- Sort expenses by amount
+- Automatic persistence using MySQL
 
-## Database Setup
 
-Run the `schema.sql` file before starting the application.
 
-The application uses:
+## Tech Stack
 
-* `expenses` table for expense records
-* `budget_config` table for budget management
+- Java 17
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- MySQL
+- Maven
+- REST APIs
+- Postman
+
+
+
+## Project Structure
+
+```
+src/main/java
+│
+├── controller
+├── model
+├── repository
+├── service
+└── ExpensetrackerApplication
+```
+
+
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/expenses` | Add a new expense |
+| GET | `/api/expenses` | Retrieve all expenses |
+| GET | `/api/expenses/{id}` | Retrieve an expense by ID |
+| PUT | `/api/expenses/{id}` | Update an expense |
+| DELETE | `/api/expenses/{id}` | Delete an expense |
+| GET | `/api/expenses/search?category={category}` | Search expenses by category |
+| GET | `/api/expenses/summary` | View category-wise expense summary |
+| GET | `/api/expenses/sorted` | View expenses sorted by amount |
+
+
+
+## Architecture
+
+```
+Postman
+    │
+HTTP Request
+    │
+@RestController
+    │
+Service Layer
+    │
+Repository (Spring Data JPA)
+    │
+Hibernate
+    │
+MySQL
+```
+
+
+
+## Skills Demonstrated
+
+- Object-Oriented Programming (OOP)
+- Layered Architecture
+- REST API Development
+- CRUD Operations
+- Spring Boot
+- Spring Data JPA
+- Hibernate ORM
+- MySQL Integration
+- Repository Pattern
+- Dependency Injection
+- Exception Handling
+- Maven Project Management
+
 
 ## Future Improvements
 
-* REST API integration using Spring Boot
-* User authentication and authorization
-* Dashboard-based UI
-* Data visualization and analytics
-* Expense export functionality
+- Bean Validation (`@Valid`)
+- Global Exception Handling
+- DTO Layer
+- Swagger/OpenAPI Documentation
+- Pagination & Sorting
+- Budget Alerts
+- Authentication & Authorization
 
-## Learning Outcomes
+---
 
-This project helped strengthen concepts in:
+## Author
 
-* OOP Design
-* Collections Framework
-* JDBC
-* MySQL Database Operations
-* Exception Handling
-* Data Persistence
-* Version Control using Git
+**Harshit Kumar Singh**
+
+Backend Developer | Java | Spring Boot | MySQL | REST APIs | DSA
