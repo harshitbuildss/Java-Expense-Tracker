@@ -70,5 +70,5 @@ public class ExpenseService {
     public Expense getExpenseById(int id) {
     return expenseRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("Expense not found."));
-}
+    }
 }
