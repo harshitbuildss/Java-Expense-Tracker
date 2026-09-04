@@ -95,13 +95,13 @@ MySQL
 
 The main transaction endpoint supports optional parameters:
 
-type
-category
-keyword
-startDate
-endDate
-sortBy
-order
+-type
+-category
+-keyword
+=startDate
+-endDate
+-sortBy
+-order
 
 
 This allows the frontend to retrieve exactly the data required for transaction lists, analytics, and dashboard visualizations.
