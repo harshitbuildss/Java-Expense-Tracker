@@ -129,56 +129,45 @@ This allows the frontend to generate charts, summaries, and financial insights u
 
 ## Database
 
-The application uses **MySQL** with Spring Data JPA and Hibernate for persistence.
+The application uses **MySQL** with **Spring Data JPA** and **Hibernate** for data persistence.
 
 The main transaction data contains:
 
-id
-amount
-category
-date
-description
-type
+- `id` — Unique transaction identifier
+- `amount` — Transaction amount
+- `category` — Transaction category
+- `date` — Transaction date
+- `description` — Transaction description
+- `type` — Transaction type
 
-Where `type` can be:
+The `type` field supports:
 
-
-INCOME
-EXPENSE
-
+- `INCOME`
+- `EXPENSE`
 
 Existing expense records are maintained as `EXPENSE` transactions.
 
----
 
 ## Architecture
 
+The application follows a layered architecture:
 
+```text
 React / Postman
-      │
-      ▼
- REST API
-      │
-      ▼
-@RestController
-      │
-      ▼
- Service Layer
-      │
-      ▼
- Repository Layer
-      │
-      ▼
- Spring Data JPA
-      │
-      ▼
- Hibernate
-      │
-      ▼
- MySQL
-
-
----
+      ↓
+REST API
+      ↓
+Controller Layer
+      ↓
+Service Layer
+      ↓
+Repository Layer
+      ↓
+Spring Data JPA
+      ↓
+Hibernate
+      ↓
+MySQL 
 
 ## Skills Demonstrated
 
@@ -213,11 +202,12 @@ React / Postman
 
 ---
 
+
+### Author
+
+```markdown
 ## Author
 
 **Harshit Kumar Singh**
 
 Backend Developer | Java | Spring Boot | MySQL | REST APIs | DSA
-
-```
-```
