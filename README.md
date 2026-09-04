@@ -6,14 +6,15 @@ A backend expense management application built using **Spring Boot**, **Spring D
 
 ## Features:
 
-- Add a new expense
-- View all expenses
-- View an expense by ID
-- Update existing expenses
-- Delete expenses
-- Search expenses by category
+- Add a new expense or income entry
+- View all transactions, with optional filters (type, category, keyword, date range) and sorting
+- View a transaction by ID
+- Update existing transactions
+- Delete transactions
+- Search transactions by category, type, or keyword
 - Category-wise expense summary
-- Sort expenses by amount
+- Full dashboard summary: total income, total expense, balance, net savings, total transactions, average expense, category breakdown, monthly income/expense breakdown
+- Sort transactions by amount or date
 - Automatic persistence using MySQL
 
 
@@ -49,14 +50,16 @@ src/main/java
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/expenses` | Add a new expense |
-| GET | `/api/expenses` | Retrieve all expenses |
-| GET | `/api/expenses/{id}` | Retrieve an expense by ID |
-| PUT | `/api/expenses/{id}` | Update an expense |
-| DELETE | `/api/expenses/{id}` | Delete an expense |
-| GET | `/api/expenses/search?category={category}` | Search expenses by category |
-| GET | `/api/expenses/summary` | View category-wise expense summary |
-| GET | `/api/expenses/sorted` | View expenses sorted by amount |
+| POST | `/api/expenses` | Add a new expense (type is always forced to EXPENSE) |
+| POST | `/api/expenses/income` | Add a new income entry (type is always forced to INCOME) |
+| GET | `/api/expenses` | Get all transactions. Optional query params: `type`, `category`, `keyword`, `startDate`, `endDate`, `sortBy`, `order` |
+| GET | `/api/expenses/{id}` | Retrieve a transaction by ID |
+| PUT | `/api/expenses/{id}` | Update a transaction |
+| DELETE | `/api/expenses/{id}` | Delete a transaction |
+| GET | `/api/expenses/search?category=&type=&keyword=` | Search transactions (all params optional) |
+| GET | `/api/expenses/summary` | Category-wise EXPENSE totals |
+| GET | `/api/expenses/dashboard` | Full dashboard summary for cards + charts |
+| GET | `/api/expenses/sorted?by=amount\|date&order=asc\|desc` | Transactions sorted by amount or date |
 
 
 
