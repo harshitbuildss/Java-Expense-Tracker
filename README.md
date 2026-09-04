@@ -91,17 +91,17 @@ MySQL
 | GET    | `/api/expenses/dashboard`                              | Get complete dashboard data                              |
 | GET    | `/api/expenses/sorted?by=amount\|date&order=asc\|desc` | Sort transactions                                        |
 
-### Transaction Filtering
+## Transaction Filtering
 
-The main transaction endpoint supports optional parameters:
+The main transaction endpoint supports the following optional parameters:
 
--type
--category
--keyword
-=startDate
--endDate
--sortBy
--order
+- `type` — Filter by transaction type (`INCOME` or `EXPENSE`)
+- `category` — Filter by expense category
+- `keyword` — Search by description or keyword
+- `startDate` — Filter transactions from a specific date
+- `endDate` — Filter transactions up to a specific date
+- `sortBy` — Sort by amount or date
+- `order` — Sort in ascending (`asc`) or descending (`desc`) order
 
 
 This allows the frontend to retrieve exactly the data required for transaction lists, analytics, and dashboard visualizations.
