@@ -206,8 +206,7 @@ Spring Data JPA
 
 ### Author
 
-```markdown
-## Author
+
 
 **Harshit Kumar Singh**
 
