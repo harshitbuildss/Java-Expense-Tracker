@@ -153,22 +153,23 @@ Existing expense records are maintained as `EXPENSE` transactions.
 The application follows a layered architecture:
 
 ```text
-React / Postman
+ React / Postman
       ↓
-REST API
+   REST API
       ↓
-Controller Layer
+ Controller Layer
       ↓
-Service Layer
+ Service Layer
       ↓
 Repository Layer
       ↓
 Spring Data JPA
       ↓
-Hibernate
+  Hibernate
       ↓
-MySQL 
+    MySQL 
 
+```
 ## Skills Demonstrated
 
 * Object-Oriented Programming (OOP)
